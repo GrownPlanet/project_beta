@@ -5,10 +5,10 @@ fn main() {
         "min",
         "kwartier",
         "uur",
-        "etmaal",
+        "dag",
         "weekend",
         "trimester",
-        "tropisch jaar",
+        "jaar",
     ];
 
     let dist_conv = [
@@ -24,10 +24,10 @@ fn main() {
         "lichtmin",
         "lichtkwartier",
         "lichtuur",
-        "lichtetmaal",
+        "lichtdag",
         "lichtweekend",
         "lichttrimester",
-        "lichttropisch jaar",
+        "lichtjaar",
     ];
 
     let time_s = 90.0;
@@ -60,10 +60,10 @@ pub fn convert_seconds(t: f64, to: &str) -> Option<f64> {
         "min"                   => Some(t / 60.),
         "kwartier"              => Some(t / 900.),
         "uur"                   => Some(t / 3600.),
-        "etmaal"                => Some(t / 86400.),
+        "dag"                => Some(t / 86400.),
         "weekend"               => Some(t / 172800.),
         "trimester"             => Some(t / 2880000.),
-        "tropisch jaar"         => Some(t / 31556926.08),
+        "jaar"         => Some(t / 31556926.08),
         _                       => None
     }
 }
