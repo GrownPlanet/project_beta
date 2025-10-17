@@ -3,8 +3,10 @@
     <head>
         <title>Project Beta</title>
         <link rel="icon" type="image/png" href="favicon.png">
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
     </head>
     <body>
+        <div class="container">
         <h1>=== Project Beta ===</h1>
         <p>
         <input type="number" id="van_num" value="0"> 
@@ -26,6 +28,7 @@
             Gemaakt door het cansat team I. Explorers. Onze social media:
             <a href="https://myspace.com/i_explorer">myspace</a>, ...
         </p>
+        </div>
     </body>
 
     <script type="module">
@@ -85,4 +88,48 @@
 
         run();
     </script>
+    <style>
+        body {
+            background-color: #c0c0c0;
+            font-family: "Times New Roman", serif;
+            color: #002000;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #ff0000;
+            text-align: center;
+            text-shadow: 1px 1px #631214;
+        }
+
+        a {
+            color: #0000ff;
+            text-decoration: underline;
+        }
+
+        a:hover {
+            color: #ff0000;
+            background-color: #ffff00;
+        }
+
+        .container {
+            border: 2px ridge #009900;
+            background-color: #ffffff;
+            padding: 10px;
+            width: 80%;
+            margin: 0 auto;
+        }
+
+        button {
+            background-color: #c0c0c0;
+            border: 2px outset #ffffff;
+            padding: 5px 10px;
+            font-family: "Courier New", monospace;
+        }
+
+        button:hover {
+            background-color: #6d6d6d;
+        }
+    </style>
 </html>

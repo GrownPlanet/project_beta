@@ -2,7 +2,7 @@ use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
 pub fn get_time_formats() -> Vec<String> {
-    ["plancktijd", "seconde", "min", "kwartier", "uur", "dag", "weekend", "trimester", "jaar"]
+    ["plancktijd", "seconden", "min", "kwartier", "uur", "dag", "weekend", "trimester", "jaar"]
         .iter()
         .map(|s| s.to_string())
         .collect()
@@ -18,7 +18,7 @@ pub fn get_distance_formats() -> Vec<String> {
         "zeemijl",
         "AE",
         "parsec",
-        "lichtseconde",
+        "lichtseconden",
         "lichtmin",
         "lichtkwartier",
         "lichtuur",
@@ -37,7 +37,7 @@ pub fn get_distance_formats() -> Vec<String> {
 pub fn convert_seconds(t: f64, to: &str) -> Option<f64> {
     match to {
         "plancktijd"            => Some(t * 10f64.powi(44) / 5.39124),
-        "seconde"               => Some(t),
+        "seconden"               => Some(t),
         "min"                   => Some(t / 60.),
         "kwartier"              => Some(t / 900.),
         "uur"                   => Some(t / 3600.),
@@ -198,7 +198,7 @@ mod test {
     fn print_time() {
         let time_conv = [
             "plancktijd",
-            "seconde",
+            "seconden",
             "min",
             "kwartier",
             "uur",
