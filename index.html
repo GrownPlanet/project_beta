@@ -19,6 +19,7 @@
         </p>
         <p>
         <button type="button" id="random">random</button>
+        <button type="button" id="best">beste</button>
         </p>
         <p>gemaakt door het cansat team I. Explorers</p>
     </body>
@@ -45,28 +46,36 @@
                 const van_eh = document.getElementById('van_eh').value;
                 const rand_t_eh = random_element(time_formats);
                 const rand_d_eh = random_element(distance_formats);
+
                 switch (van_eh) {
                     case "time": {
                         const result = eh.convert_seconds(van_num, rand_t_eh);
-                        update_result(result, rand_t_eh)
+                        update_result(result, rand_t_eh);
                         break;
                     }
                     case "distance": {
                         const result = eh.convert_meters(van_num, rand_d_eh);
-                        update_result(result, rand_d_eh)
+                        update_result(result, rand_d_eh);
                         break;
                     }
                     case "speed": {
                         const result = eh.convert_speed(van_num, rand_d_eh, rand_t_eh);
-                        update_result(result, rand_d_eh + "/" + rand_t_eh)
+                        update_result(result, rand_d_eh + "/" + rand_t_eh);
                         break;
                     }
                     case "acceleration": {
                         const result = eh.convert_acceleration(van_num, rand_d_eh, rand_t_eh);
-                        update_result(result, rand_d_eh + "/" + rand_t_eh)
+                        update_result(result, rand_d_eh + "/" + rand_t_eh);
                         break;
                     }
                 }
+            };
+
+            document.getElementById("best").onclick = function() {
+                const van_num = document.getElementById('van_num').value;
+                const van_eh = document.getElementById('van_eh').value;
+                const res = eh.find_best(van_num, van_eh);
+                update_result(res.result, res.unit);
             };
         }
 

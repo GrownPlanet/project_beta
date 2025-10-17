@@ -6,7 +6,14 @@ export function convert_seconds(t: number, to: string): number | undefined;
 export function convert_meters(x: number, to: string): number | undefined;
 export function convert_speed(v: number, dist: string, time: string): number | undefined;
 export function convert_acceleration(a: number, dist: string, time: string): number | undefined;
-export function find_best(v: number, mode: string): void;
+export function find_best(v: number, mode: string): BestResult;
+export class BestResult {
+  free(): void;
+  [Symbol.dispose](): void;
+  constructor(result: number, unit: string);
+  result: number;
+  unit: string;
+}
 
 export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembly.Module;
 
@@ -18,7 +25,13 @@ export interface InitOutput {
   readonly convert_meters: (a: number, b: number, c: number) => [number, number];
   readonly convert_speed: (a: number, b: number, c: number, d: number, e: number) => [number, number];
   readonly convert_acceleration: (a: number, b: number, c: number, d: number, e: number) => [number, number];
-  readonly find_best: (a: number, b: number, c: number) => void;
+  readonly __wbg_bestresult_free: (a: number, b: number) => void;
+  readonly __wbg_get_bestresult_result: (a: number) => number;
+  readonly __wbg_set_bestresult_result: (a: number, b: number) => void;
+  readonly __wbg_get_bestresult_unit: (a: number) => [number, number];
+  readonly __wbg_set_bestresult_unit: (a: number, b: number, c: number) => void;
+  readonly bestresult_new: (a: number, b: number, c: number) => number;
+  readonly find_best: (a: number, b: number, c: number) => number;
   readonly __wbindgen_export_0: WebAssembly.Table;
   readonly __externref_drop_slice: (a: number, b: number) => void;
   readonly __wbindgen_free: (a: number, b: number, c: number) => void;

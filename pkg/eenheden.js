@@ -179,12 +179,90 @@ export function convert_acceleration(a, dist, time) {
 /**
  * @param {number} v
  * @param {string} mode
+ * @returns {BestResult}
  */
 export function find_best(v, mode) {
     const ptr0 = passStringToWasm0(mode, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
     const len0 = WASM_VECTOR_LEN;
-    wasm.find_best(v, ptr0, len0);
+    const ret = wasm.find_best(v, ptr0, len0);
+    return BestResult.__wrap(ret);
 }
+
+const BestResultFinalization = (typeof FinalizationRegistry === 'undefined')
+    ? { register: () => {}, unregister: () => {} }
+    : new FinalizationRegistry(ptr => wasm.__wbg_bestresult_free(ptr >>> 0, 1));
+
+export class BestResult {
+
+    static __wrap(ptr) {
+        ptr = ptr >>> 0;
+        const obj = Object.create(BestResult.prototype);
+        obj.__wbg_ptr = ptr;
+        BestResultFinalization.register(obj, obj.__wbg_ptr, obj);
+        return obj;
+    }
+
+    __destroy_into_raw() {
+        const ptr = this.__wbg_ptr;
+        this.__wbg_ptr = 0;
+        BestResultFinalization.unregister(this);
+        return ptr;
+    }
+
+    free() {
+        const ptr = this.__destroy_into_raw();
+        wasm.__wbg_bestresult_free(ptr, 0);
+    }
+    /**
+     * @returns {number}
+     */
+    get result() {
+        const ret = wasm.__wbg_get_bestresult_result(this.__wbg_ptr);
+        return ret;
+    }
+    /**
+     * @param {number} arg0
+     */
+    set result(arg0) {
+        wasm.__wbg_set_bestresult_result(this.__wbg_ptr, arg0);
+    }
+    /**
+     * @returns {string}
+     */
+    get unit() {
+        let deferred1_0;
+        let deferred1_1;
+        try {
+            const ret = wasm.__wbg_get_bestresult_unit(this.__wbg_ptr);
+            deferred1_0 = ret[0];
+            deferred1_1 = ret[1];
+            return getStringFromWasm0(ret[0], ret[1]);
+        } finally {
+            wasm.__wbindgen_free(deferred1_0, deferred1_1, 1);
+        }
+    }
+    /**
+     * @param {string} arg0
+     */
+    set unit(arg0) {
+        const ptr0 = passStringToWasm0(arg0, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len0 = WASM_VECTOR_LEN;
+        wasm.__wbg_set_bestresult_unit(this.__wbg_ptr, ptr0, len0);
+    }
+    /**
+     * @param {number} result
+     * @param {string} unit
+     */
+    constructor(result, unit) {
+        const ptr0 = passStringToWasm0(unit, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len0 = WASM_VECTOR_LEN;
+        const ret = wasm.bestresult_new(result, ptr0, len0);
+        this.__wbg_ptr = ret >>> 0;
+        BestResultFinalization.register(this, this.__wbg_ptr, this);
+        return this;
+    }
+}
+if (Symbol.dispose) BestResult.prototype[Symbol.dispose] = BestResult.prototype.free;
 
 const EXPECTED_RESPONSE_TYPES = new Set(['basic', 'cors', 'default']);
 
@@ -224,6 +302,9 @@ async function __wbg_load(module, imports) {
 function __wbg_get_imports() {
     const imports = {};
     imports.wbg = {};
+    imports.wbg.__wbg_wbindgenthrow_451ec1a8469d7eb6 = function(arg0, arg1) {
+        throw new Error(getStringFromWasm0(arg0, arg1));
+    };
     imports.wbg.__wbindgen_cast_2241b6af4c4b2941 = function(arg0, arg1) {
         // Cast intrinsic for `Ref(String) -> Externref`.
         const ret = getStringFromWasm0(arg0, arg1);
