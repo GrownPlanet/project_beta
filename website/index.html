@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Project Beta</title>
+        <link rel="icon" type="image/png" href="favicon.png">
+    </head>
+    <body>
+        <h1>=== Project Beta ===</h1>
+        <p>
+        <input type="number" id="van_num" value="0"> 
+        <select id="van_eh">
+            <option value="time">s</option>
+            <option value="distance">m</option>
+            <option value="speed">m/s</option>
+            <option value="acceleration">m/s^2</option>
+        </select> 
+        =
+        <span id="result"</span>
+        </p>
+        <p>
+        <button type="button" id="bereken">random</button>
+        </p>
+        <p>gemaakt door het cansat team I. Explorers</p>
+    </body>
+
+    <script type="module">
+        import init, * as eh from './pkg/eenheden.js';
+
+        function random_element(arr) {
+            return arr[Math.floor(Math.random() * arr.length)];
+        }
+
+        function update_result(res, eh) {
+            document.getElementById("result").textContent = res.toString().replace("e", " * 10^") + " " + eh;
+        }
+
+        async function run() {
+            await init();
+
+            const time_formats = eh.get_time_formats();
+            const distance_formats = eh.get_distance_formats();
+
+            document.getElementById("bereken").onclick = function() {
+                const van_num = document.getElementById('van_num').value;
+                const van_eh = document.getElementById('van_eh').value;
+                const rand_t_eh = random_element(time_formats);
+                const rand_d_eh = random_element(distance_formats);
+                switch (van_eh) {
+                    case "time": {
+                        const result = eh.convert_seconds(van_num, rand_t_eh);
+                        update_result(result, rand_t_eh)
+                        break;
+                    }
+                    case "distance": {
+                        const result = eh.convert_meters(van_num, rand_d_eh);
+                        update_result(result, rand_d_eh)
+                        break;
+                    }
+                    case "speed": {
+                        const result = eh.convert_speed(van_num, rand_d_eh, rand_t_eh);
+                        update_result(result, rand_d_eh + "/" + rand_t_eh)
+                        break;
+                    }
+                    case "acceleration": {
+                        const result = eh.convert_acceleration(van_num, rand_d_eh, rand_t_eh);
+                        update_result(result, rand_d_eh + "/" + rand_t_eh)
+                        break;
+                    }
+                }
+            };
+        }
+
+        run();
+    </script>
+</html>
