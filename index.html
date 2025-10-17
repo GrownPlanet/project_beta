@@ -18,7 +18,7 @@
         <span id="result"</span>
         </p>
         <p>
-        <button type="button" id="bereken">random</button>
+        <button type="button" id="random">random</button>
         </p>
         <p>gemaakt door het cansat team I. Explorers</p>
     </body>
@@ -40,7 +40,7 @@
             const time_formats = eh.get_time_formats();
             const distance_formats = eh.get_distance_formats();
 
-            document.getElementById("bereken").onclick = function() {
+            document.getElementById("random").onclick = function() {
                 const van_num = document.getElementById('van_num').value;
                 const van_eh = document.getElementById('van_eh').value;
                 const rand_t_eh = random_element(time_formats);

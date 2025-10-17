@@ -1,8 +1,12 @@
 build:
     wasm-pack build --target web
-    rm -rf ./website/pkg
-    mv ./pkg ./website/pkg
 
 run:
     just build
-    cd website && python -m http.server
+    python -m http.server
+
+commit:
+    just build
+    rm pkg/.gitignore
+    git add -A
+    git commit

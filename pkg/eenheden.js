@@ -176,6 +176,16 @@ export function convert_acceleration(a, dist, time) {
     return ret[0] === 0 ? undefined : ret[1];
 }
 
+/**
+ * @param {number} v
+ * @param {string} mode
+ */
+export function find_best(v, mode) {
+    const ptr0 = passStringToWasm0(mode, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const len0 = WASM_VECTOR_LEN;
+    wasm.find_best(v, ptr0, len0);
+}
+
 const EXPECTED_RESPONSE_TYPES = new Set(['basic', 'cors', 'default']);
 
 async function __wbg_load(module, imports) {

@@ -7,6 +7,7 @@ export const convert_seconds: (a: number, b: number, c: number) => [number, numb
 export const convert_meters: (a: number, b: number, c: number) => [number, number];
 export const convert_speed: (a: number, b: number, c: number, d: number, e: number) => [number, number];
 export const convert_acceleration: (a: number, b: number, c: number, d: number, e: number) => [number, number];
+export const find_best: (a: number, b: number, c: number) => void;
 export const __wbindgen_export_0: WebAssembly.Table;
 export const __externref_drop_slice: (a: number, b: number) => void;
 export const __wbindgen_free: (a: number, b: number, c: number) => void;

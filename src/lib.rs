@@ -84,6 +84,10 @@ pub fn convert_acceleration(a: f64, dist: &str, time: &str) -> Option<f64> {
     Some(a * d / t.powi(2))
 }
 
+#[wasm_bindgen]
+pub fn find_best(v: f64, mode: &str) {
+}
+
 #[cfg(test)]
 mod test {
     use super::*;
