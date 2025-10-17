@@ -53,7 +53,7 @@ fn main() {
     println!("{} m/s^2 = {} m/u^2", a, a2);
 }
 
-pub fn convert_seconds(t: f64, to: &str) -> Option<f64> {
+fn convert_seconds(t: f64, to: &str) -> Option<f64> {
     match to {
         "plancktijd"            => Some(t * 10f64.powi(44) / 5.39124),
         "seconde"               => Some(t),
@@ -68,7 +68,7 @@ pub fn convert_seconds(t: f64, to: &str) -> Option<f64> {
     }
 }
 
-pub fn convert_meters(x: f64, to: &str) -> Option<f64>{
+fn convert_meters(x: f64, to: &str) -> Option<f64>{
     match to {
         "plancklengte" => Some(x * 10f64.powi(35) / 1.616255),
         "angstrom"     => Some(x * 1000000000.),
@@ -89,13 +89,13 @@ pub fn convert_meters(x: f64, to: &str) -> Option<f64>{
     }
 }
 
-pub fn convert_speed(v: f64, dist: &str, time: &str) -> Option<f64> {
+fn convert_speed(v: f64, dist: &str, time: &str) -> Option<f64> {
     let d = convert_meters(1., dist)?;
     let t = convert_seconds(1., time)?;
     Some(v * d / t)
 }
 
-pub fn convert_acceleration(a: f64, dist: &str, time: &str) -> Option<f64> {
+fn convert_acceleration(a: f64, dist: &str, time: &str) -> Option<f64> {
     let d = convert_meters(1., dist)?;
     let t = convert_seconds(1., time)?;
     Some(a * d / t.powi(2))
