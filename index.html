@@ -20,13 +20,11 @@
         <span id="result"</span>
         </p>
         <p>
-        <button type="button" id="random">random</button>
-        <button type="button" id="best">beste</button>
-        </p>
-        <p>
-        <button type="button" id="chosen">gekozen</button>
         <select id="dist_eh"></select>
         <select id="time_eh"></select>
+        <button type="button" id="chosen">gekozen</button>
+        <button type="button" id="best">beste</button>
+        <button type="button" id="random">random</button>
         </p>
         <p>Je kunt wetenschappelijke notatie gebruiken met e; bv: 123e-12.</p>
         <p>
@@ -222,7 +220,7 @@
                 }
                 case "acceleration": {
                     const result = convert_acceleration(van_num, d_eh, t_eh);
-                    update_result(result, d_eh + "/" + t_eh);
+                    update_result(result, d_eh + "/" + t_eh + "^2");
                     break;
                 }
             }
@@ -293,6 +291,7 @@
             document.getElementById("best").onclick = set_best;
             document.getElementById("chosen").onclick = set_chosen;
             van_eh_update();
+            set_best();
         }
 
         run();
