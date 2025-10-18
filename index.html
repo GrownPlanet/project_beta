@@ -10,7 +10,7 @@
         <h1>=== Project Beta ===</h1>
         <p>
         <input type="number" id="van_num" value="0"> 
-        <select id="van_eh">
+        <select id="van_eh" onchange="van_eh_update()">
             <option value="time">s</option>
             <option value="distance">m</option>
             <option value="speed">m/s</option>
@@ -23,6 +23,11 @@
         <button type="button" id="random">random</button>
         <button type="button" id="best">beste</button>
         </p>
+        <p>
+        <button type="button" id="chosen">gekozen</button>
+        <select id="dist_eh"></select>
+        <select id="time_eh"></select>
+        </p>
         <p>Je kunt wetenschappelijke notatie gebruiken met e; bv: 123e-12.</p>
         <p>
             Gemaakt door het cansat team I. Explorers. Onze social media:
@@ -30,8 +35,7 @@
         </p>
         </div>
     </body>
-
-    <script type="module">
+    <script>
         const time_formats = [
             "plancktijd",
             "seconden",
@@ -196,43 +200,99 @@
             }
         }
 
-        function run() {
-            document.getElementById("random").onclick = function() {
-                const van_num = document.getElementById('van_num').value;
-                const van_eh = document.getElementById('van_eh').value;
-                const rand_t_eh = random_element(time_formats);
-                const rand_d_eh = random_element(distance_formats);
+        function set_eh(t_eh, d_eh) {
+            const van_num = document.getElementById('van_num').value;
+            const van_eh = document.getElementById('van_eh').value;
 
-                switch (van_eh) {
-                    case "time": {
-                        const result = convert_seconds(van_num, rand_t_eh);
-                        update_result(result, rand_t_eh);
-                        break;
-                    }
-                    case "distance": {
-                        const result = convert_meters(van_num, rand_d_eh);
-                        update_result(result, rand_d_eh);
-                        break;
-                    }
-                    case "speed": {
-                        const result = convert_speed(van_num, rand_d_eh, rand_t_eh);
-                        update_result(result, rand_d_eh + "/" + rand_t_eh);
-                        break;
-                    }
-                    case "acceleration": {
-                        const result = convert_acceleration(van_num, rand_d_eh, rand_t_eh);
-                        update_result(result, rand_d_eh + "/" + rand_t_eh);
-                        break;
-                    }
+            switch (van_eh) {
+                case "time": {
+                    const result = convert_seconds(van_num, t_eh);
+                    update_result(result, t_eh);
+                    break;
                 }
-            };
+                case "distance": {
+                    const result = convert_meters(van_num, d_eh);
+                    update_result(result, d_eh);
+                    break;
+                }
+                case "speed": {
+                    const result = convert_speed(van_num, d_eh, t_eh);
+                    update_result(result, d_eh + "/" + t_eh);
+                    break;
+                }
+                case "acceleration": {
+                    const result = convert_acceleration(van_num, d_eh, t_eh);
+                    update_result(result, d_eh + "/" + t_eh);
+                    break;
+                }
+            }
+        }
 
-            document.getElementById("best").onclick = function() {
-                const van_num = document.getElementById('van_num').value;
-                const van_eh = document.getElementById('van_eh').value;
-                const res = find_best(van_num, van_eh);
-                update_result(res[0], res[1]);
-            };
+        function set_random() {
+            const rand_t_eh = random_element(time_formats);
+            const rand_d_eh = random_element(distance_formats);
+            set_eh(rand_t_eh, rand_d_eh);
+        }
+
+        function set_chosen() {
+            const t_eh = document.getElementById('time_eh').value;
+            const d_eh = document.getElementById('dist_eh').value;
+            set_eh(t_eh, d_eh);
+        }
+
+        function set_best() {
+            const van_num = document.getElementById('van_num').value;
+            const van_eh = document.getElementById('van_eh').value;
+            const res = find_best(van_num, van_eh);
+            update_result(res[0], res[1]);
+        }
+
+        function set_selection(selection, options) {
+            const select = document.getElementById(selection);
+            for (let i = 0; i < options.length; i++) {
+                const option = document.createElement("option");
+                const form = options[i];
+                option.value = form;
+                option.text = form;
+                select.appendChild(option);
+            }
+        }
+
+        function van_eh_update() {
+            const van_eh = document.getElementById("van_eh").value;
+            const t_eh = document.getElementById('time_eh');
+            const d_eh = document.getElementById('dist_eh');
+            switch (van_eh) {
+                case "time": {
+                    t_eh.disabled = false;
+                    d_eh.disabled = true;
+                    break;
+                }
+                case "distance": {
+                    t_eh.disabled = true;
+                    d_eh.disabled = false;
+                    break;
+                }
+                case "speed": {
+                    t_eh.disabled = false;
+                    d_eh.disabled = false;
+                    break;
+                }
+                case "acceleration": {
+                    t_eh.disabled = false;
+                    d_eh.disabled = false;
+                    break;
+                }
+            }
+        }
+
+        function run() {
+            set_selection("time_eh", time_formats);
+            set_selection("dist_eh", distance_formats);
+            document.getElementById("random").onclick = set_random;
+            document.getElementById("best").onclick = set_best;
+            document.getElementById("chosen").onclick = set_chosen;
+            van_eh_update();
         }
 
         run();
@@ -278,7 +338,7 @@
         }
 
         button:hover {
-            background-color: #6d6d6d;
+            background-color: #848484;
         }
     </style>
 </html>
