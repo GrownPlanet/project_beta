@@ -32,7 +32,82 @@
     </body>
 
     <script type="module">
-        import init, * as eh from './pkg/eenheden.js';
+        const time_formats = [
+            "plancktijd",
+            "seconden",
+            "min",
+            "kwartier",
+            "uur",
+            "dag",
+            "weekend",
+            "trimester",
+            "jaar"
+        ];
+
+        const distance_formats = [
+            "plancklengte",
+            "angstrom",
+            "meter",
+            "inch",
+            "zeemijl",
+            "AE",
+            "parsec",
+            "lichtseconden",
+            "lichtmin",
+            "lichtkwartier",
+            "lichtuur",
+            "lichtdag",
+            "lichtweekend",
+            "lichttrimester",
+            "lichtjaar"
+        ];
+
+        function convert_seconds(t, to) {
+            switch (to) {
+                case "plancktijd": return t * 10**44 / 5.39124;
+                case "seconden": return t;
+                case "min": return t / 60;
+                case "kwartier": return t / 900;
+                case "uur": return t / 3600;
+                case "dag": return t / 86400;
+                case "weekend": return t / 172800;
+                case "trimester": return t / 2880000;
+                case "jaar": return t / 31556926.08;
+                default: return null;
+            }
+        }
+
+        function convert_meters(x, to) {
+            switch (to) {
+                case "plancklengte": return x * 10 ** 35 / 1.616255;
+                case "angstrom": return x * 1000000000;
+                case "meter": return x;
+                case "inch": return x / 0.0254;
+                case "zeemijl": return x / 1852;
+                case "AE": return x / 149597870700;
+                case "parsec": return x / (149597870700 * 648000 / Math.PI);
+                default: {
+                    if (to.startsWith("licht")) {
+                        const r = convert_seconds(1, to.slice(5));
+                        return (x * r) / 299792458;
+                    } else {
+                        return null;
+                    }
+                }
+            }
+        }
+
+        function convert_speed(v, dist, time) {
+            const d = convert_meters(1, dist);
+            const t = convert_seconds(1, time);
+            return v * d / t;
+        }
+
+        function convert_acceleration(a, dist, time) {
+            const d = convert_meters(1, dist);
+            const t = convert_seconds(1, time);
+            return a * d / t**2;
+        }
 
         function random_element(arr) {
             return arr[Math.floor(Math.random() * arr.length)];
@@ -42,12 +117,86 @@
             document.getElementById("result").textContent = res.toString().replace("e", " * 10^") + " " + eh;
         }
 
-        async function run() {
-            await init();
+        // fuck js
+        function to_non_exponential(num) {
+            const str = num.toString();
+            if (str.indexOf('e') === -1) return str;
+            const [base, exp] = str.split('e');
+            const expNum = Number(exp);
 
-            const time_formats = eh.get_time_formats();
-            const distance_formats = eh.get_distance_formats();
+            if (expNum > 0) {
+                const [intPart, decPart=''] = base.split('.');
+                return intPart + (decPart + '0'.repeat(expNum)).slice(0, expNum) + (decPart.length > expNum ? '.' + decPart.slice(expNum) : '');
+            } else {
+                const zeros = '0'.repeat(Math.abs(expNum) - 1);
+                return '0.' + zeros + base.replace('.', '');
+            }
+        }
 
+        function calc_score(num) {
+            const leading_0_pennalty = 2;
+            const snum = to_non_exponential(num);
+            const [front, back = ""] = snum.split(".");
+            if (front == "0") {
+                const m = back.match(/^0+/);
+                return (m ? m[0].length : 0) + leading_0_pennalty;
+            }
+            return front.length;
+        }
+
+        function best_result_1(v, formats, convert) {
+            let best_score = Number.MAX_SAFE_INTEGER;
+            let best_format = "";
+            let best_result = 0;
+
+            for (let i = 0; i < formats.length; i++) {
+                const f = formats[i];
+                const res = convert(v, f);
+                const score = calc_score(res);
+                if (score < best_score) {
+                    best_score = score;
+                    best_format = f;
+                    best_result = res;
+                }
+            }
+
+            return [best_result, best_format];
+        }
+
+        function best_result_2(v, d_fmt, t_fmt, convert, acc) {
+            let best_score = Number.MAX_SAFE_INTEGER;
+            let best_format = "";
+            let best_result = 0;
+
+            for (let i = 0; i < d_fmt.length; i++) {
+                for (let j = 0; j < t_fmt.length; j++) {
+                    const d = d_fmt[i];
+                    const t = t_fmt[j];
+                    const res = convert(v, d, t);
+                    const score = calc_score(res);
+                    if (score < best_score) {
+                        best_score = score;
+                        best_format = d + "/" + t;
+                        if (acc) { best_format += "^2" }
+                        best_result = res;
+                    }
+                }
+            }
+
+            return [best_result, best_format];
+        }
+
+        function find_best(v, mode) {
+            switch (mode) {
+                case "time": return best_result_1(v, time_formats, convert_seconds);
+                case "distance": return best_result_1(v, distance_formats, convert_meters);
+                case "speed": return best_result_2(v, distance_formats, time_formats, convert_speed, false);
+                case "acceleration": return best_result_2(v, distance_formats, time_formats, convert_acceleration, true);
+                default: return null;
+            }
+        }
+
+        function run() {
             document.getElementById("random").onclick = function() {
                 const van_num = document.getElementById('van_num').value;
                 const van_eh = document.getElementById('van_eh').value;
@@ -56,22 +205,22 @@
 
                 switch (van_eh) {
                     case "time": {
-                        const result = eh.convert_seconds(van_num, rand_t_eh);
+                        const result = convert_seconds(van_num, rand_t_eh);
                         update_result(result, rand_t_eh);
                         break;
                     }
                     case "distance": {
-                        const result = eh.convert_meters(van_num, rand_d_eh);
+                        const result = convert_meters(van_num, rand_d_eh);
                         update_result(result, rand_d_eh);
                         break;
                     }
                     case "speed": {
-                        const result = eh.convert_speed(van_num, rand_d_eh, rand_t_eh);
+                        const result = convert_speed(van_num, rand_d_eh, rand_t_eh);
                         update_result(result, rand_d_eh + "/" + rand_t_eh);
                         break;
                     }
                     case "acceleration": {
-                        const result = eh.convert_acceleration(van_num, rand_d_eh, rand_t_eh);
+                        const result = convert_acceleration(van_num, rand_d_eh, rand_t_eh);
                         update_result(result, rand_d_eh + "/" + rand_t_eh);
                         break;
                     }
@@ -81,8 +230,8 @@
             document.getElementById("best").onclick = function() {
                 const van_num = document.getElementById('van_num').value;
                 const van_eh = document.getElementById('van_eh').value;
-                const res = eh.find_best(van_num, van_eh);
-                update_result(res.result, res.unit);
+                const res = find_best(van_num, van_eh);
+                update_result(res[0], res[1]);
             };
         }
 

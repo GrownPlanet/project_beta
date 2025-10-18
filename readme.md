@@ -1,5 +1,6 @@
 # Project Beta
 
-`just build` om te builden
-`just run` om te runnen
-en `just commit` om te commiten
+Vind met gemak betere eenheden om te gebruiken!
+
+Een project door het cansat team I. Explorers
+
