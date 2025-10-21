@@ -51,6 +51,7 @@
             "quarantaine",
             "trimester",
             "jaar",
+            "schrikkeljaar",
             "olympiade",
         ];
 
@@ -75,6 +76,7 @@
             "lichtquarantaine",
             "lichttrimester",
             "lichtjaar",
+            "lichtschrikkeljaar",
             "lichtolympiade"
         ];
 
@@ -94,6 +96,7 @@
                 case "quarantaine": return t / 3456000;
                 case "trimester": return t / 2880000;
                 case "jaar": return t / 31536000;
+                case "schrikkeljaar": return t / 31622400;
                 case "olympiade": return t / 126144000;
                 default: return null;
             }
