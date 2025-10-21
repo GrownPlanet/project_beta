@@ -178,7 +178,7 @@
                 const f = formats[i];
                 const res = convert(v, f);
                 const score = calc_score(res);
-                if (score < best_score) {
+                if (score < best_score || (score == best_score && res < best_result)) {
                     best_score = score;
                     best_format = f;
                     best_result = res;
@@ -199,7 +199,7 @@
                     const t = t_fmt[j];
                     const res = convert(v, d, t);
                     const score = calc_score(res);
-                    if (score < best_score) {
+                    if (score < best_score || (score == best_score && res < best_result)) {
                         best_score = score;
                         best_format = d + "/" + t;
                         if (acc) { best_format += "^2" }
