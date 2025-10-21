@@ -38,14 +38,20 @@
     <script>
         const time_formats = [
             "plancktijd",
+            "cesium-133 oscsilaties",
+            "svedberg",
+            "shake",
             "seconden",
             "min",
+            "moment",
             "kwartier",
             "uur",
             "dag",
             "weekend",
+            "quarantaine",
             "trimester",
-            "jaar"
+            "jaar",
+            "olympiade",
         ];
 
         const distance_formats = [
@@ -56,27 +62,39 @@
             "zeemijl",
             "AE",
             "parsec",
+            "lichtcesium-133 oscsilaties",
+            "lichtsvedberg",
+            "lichtshake",
             "lichtseconden",
             "lichtmin",
+            "lichtmoment",
             "lichtkwartier",
             "lichtuur",
             "lichtdag",
             "lichtweekend",
+            "lichtquarantaine",
             "lichttrimester",
-            "lichtjaar"
+            "lichtjaar",
+            "lichtolympiade"
         ];
 
         function convert_seconds(t, to) {
             switch (to) {
                 case "plancktijd": return t * 10**44 / 5.39124;
+                case "cesium-133 oscsilaties": return t * 9192631770;
+                case "svedberg": return t * 10**-13;
+                case "shake": return t * 10**-8;
                 case "seconden": return t;
                 case "min": return t / 60;
+                case "moment": return t / 90;
                 case "kwartier": return t / 900;
                 case "uur": return t / 3600;
                 case "dag": return t / 86400;
                 case "weekend": return t / 172800;
+                case "quarantaine": return t / 3456000;
                 case "trimester": return t / 2880000;
-                case "jaar": return t / 31556926.08;
+                case "jaar": return t / 31536000;
+                case "olympiade": return t / 126144000;
                 default: return null;
             }
         }
