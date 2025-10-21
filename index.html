@@ -38,7 +38,7 @@
     <script>
         const time_formats = [
             "plancktijd",
-            "cesium-133 oscsilaties",
+            "cesium-133 oscillaties",
             "svedberg",
             "shake",
             "seconden",
@@ -63,7 +63,7 @@
             "zeemijl",
             "AE",
             "parsec",
-            "lichtcesium-133 oscsilaties",
+            "lichtcesium-133 oscillaties",
             "lichtsvedberg",
             "lichtshake",
             "lichtseconden",
@@ -83,7 +83,7 @@
         function convert_seconds(t, to) {
             switch (to) {
                 case "plancktijd": return t * 10**44 / 5.39124;
-                case "cesium-133 oscsilaties": return t * 9192631770;
+                case "cesium-133 oscillaties": return t * 9192631770;
                 case "svedberg": return t * 10**-13;
                 case "shake": return t * 10**-8;
                 case "seconden": return t;
