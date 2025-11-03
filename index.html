@@ -48,6 +48,8 @@
             "uur",
             "dag",
             "weekend",
+            "verlengd weekend (3 dagen)",
+            "verlengd weekend (4 dagen)",
             "quarantaine",
             "trimester",
             "jaar",
@@ -76,6 +78,8 @@
             "lichtuur",
             "lichtdag",
             "lichtweekend",
+            "lichtverlengd weekend (3 dagen)",
+            "lichtverlengd weekend (4 dagen)",
             "lichtquarantaine",
             "lichttrimester",
             "lichtjaar",
@@ -96,6 +100,8 @@
                 case "uur": return t / 3600;
                 case "dag": return t / 86400;
                 case "weekend": return t / 172800;
+                case "verlengd weekend (3 dagen)": return t / 259200;
+                case "verlengd weekend (4 dagen)": return t / 345600;
                 case "quarantaine": return t / 3456000;
                 case "trimester": return t / 2880000;
                 case "jaar": return t / 31536000;
