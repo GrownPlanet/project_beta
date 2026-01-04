@@ -11,17 +11,19 @@
         <p>
         <input type="number" id="van_num" value="0"> 
         <select id="van_eh" onchange="van_eh_update()">
-            <option value="time">s</option>
             <option value="distance">m</option>
+            <option value="time">s</option>
             <option value="speed">m/s</option>
             <option value="acceleration">m/s^2</option>
+            <option value="mass">kg</option>
         </select> 
         =
-        <span id="result"</span>
+        <span id="result"></span>
         </p>
         <p>
         <select id="dist_eh"></select>
         <select id="time_eh"></select>
+        <select id="mass_eh"></select>
         <button type="button" id="chosen">gekozen</button>
         <button type="button" id="best">beste</button>
         <button type="button" id="random">random</button>
@@ -85,7 +87,11 @@
             "lichttrimester",
             "lichtjaar",
             "lichtschrikkeljaar",
-            "lichtolympiade"
+            "lichtolympiade",
+        ];
+
+        const mass_formats = [
+            "Australische walvis teelballen",
         ];
 
         function convert_seconds(t, to) {
@@ -133,6 +139,13 @@
                         return null;
                     }
                 }
+            }
+        }
+
+        function convert_mass(m, to) {
+            switch (to) {
+                case "Australische walvis teelballen": return m / 500;
+                default: return null;
             }
         }
 
@@ -231,11 +244,12 @@
                 case "distance": return best_result_1(v, distance_formats, convert_meters);
                 case "speed": return best_result_2(v, distance_formats, time_formats, convert_speed, false);
                 case "acceleration": return best_result_2(v, distance_formats, time_formats, convert_acceleration, true);
+                case "mass": return best_result_1(v, mass_formats, convert_mass);
                 default: return null;
             }
         }
 
-        function set_eh(t_eh, d_eh) {
+        function set_eh(t_eh, d_eh, m_eh) {
             const van_num = document.getElementById('van_num').value;
             const van_eh = document.getElementById('van_eh').value;
 
@@ -260,19 +274,26 @@
                     update_result(result, d_eh + "/" + t_eh + "^2");
                     break;
                 }
+                case "mass": {
+                    const result = convert_mass(van_num, m_eh);
+                    update_result(result, m_eh);
+                    break;
+                }
             }
         }
 
         function set_random() {
             const rand_t_eh = random_element(time_formats);
             const rand_d_eh = random_element(distance_formats);
-            set_eh(rand_t_eh, rand_d_eh);
+            const rand_m_eh = random_element(mass_formats);
+            set_eh(rand_t_eh, rand_d_eh, rand_m_eh);
         }
 
         function set_chosen() {
             const t_eh = document.getElementById('time_eh').value;
             const d_eh = document.getElementById('dist_eh').value;
-            set_eh(t_eh, d_eh);
+            const m_eh = document.getElementById('mass_eh').value;
+            set_eh(t_eh, d_eh, m_eh);
         }
 
         function set_best() {
@@ -297,25 +318,36 @@
             const van_eh = document.getElementById("van_eh").value;
             const t_eh = document.getElementById('time_eh');
             const d_eh = document.getElementById('dist_eh');
+            const w_eh = document.getElementById('mass_eh');
             switch (van_eh) {
                 case "time": {
                     t_eh.disabled = false;
                     d_eh.disabled = true;
+                    w_eh.disabled = true;
                     break;
                 }
                 case "distance": {
                     t_eh.disabled = true;
                     d_eh.disabled = false;
+                    w_eh.disabled = true;
                     break;
                 }
                 case "speed": {
                     t_eh.disabled = false;
                     d_eh.disabled = false;
+                    w_eh.disabled = true;
                     break;
                 }
                 case "acceleration": {
                     t_eh.disabled = false;
                     d_eh.disabled = false;
+                    w_eh.disabled = true;
+                    break;
+                }
+                case "mass": {
+                    t_eh.disabled = true;
+                    d_eh.disabled = true;
+                    w_eh.disabled = false;
                     break;
                 }
             }
@@ -324,6 +356,7 @@
         function run() {
             set_selection("time_eh", time_formats);
             set_selection("dist_eh", distance_formats);
+            set_selection("mass_eh", mass_formats);
             document.getElementById("random").onclick = set_random;
             document.getElementById("best").onclick = set_best;
             document.getElementById("chosen").onclick = set_chosen;
